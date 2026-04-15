@@ -61,7 +61,7 @@ Frontend estático + backend em Flask para cálculo de cashback.
 4. Configure:
    - Runtime: Python 3
    - Build Command: `pip install -r requirements.txt`
-   - Start Command: `python3 app.py`
+   - Start Command: `gunicorn --bind 0.0.0.0:$PORT wsgi:app`
 5. Render criará uma URL pública (ex: `https://cashback-app.onrender.com`).
 6. O banco SQLite será criado no container, mas note que em Render, dados podem ser perdidos em restarts (use Postgres para persistência total).
 
@@ -70,10 +70,16 @@ Frontend estático + backend em Flask para cálculo de cashback.
 1. Similar ao Render, conecte o GitHub.
 2. Railway suporta SQLite, mas para persistência, considere Postgres.
 
+### Docker (local ou cloud)
+
+1. Construa a imagem: `docker build -t cashback-app .`
+2. Rode o container: `docker run -p 5000:5000 cashback-app`
+3. Acesse `http://localhost:5000`
+
 
 ## Observações
 
 - O frontend é totalmente estático e consome a API Flask via `fetch`.
 - O histórico é filtrado por IP para exibir apenas as consultas do mesmo usuário.
 - SQLite é ideal para desenvolvimento e deploys simples, mas para produção com muitos usuários, considere PostgreSQL.
-- Para produção, use um servidor WSGI adequado em vez do servidor de desenvolvimento Flask.
+- Para produção, o app usa gunicorn como servidor WSGI (definido em `Procfile` e `wsgi.py`).
