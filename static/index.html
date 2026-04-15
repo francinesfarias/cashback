@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Cashback - Fintech</title>
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --dark-bg: #0f172a;
+            --dark-surface: #111827;
+            --dark-surface-2: #1f2937;
+            --primary-color: #60a5fa;
+            --primary-dark: #3b82f6;
+            --text-color: #e2e8f0;
+            --muted-color: #94a3b8;
+            --success-color: #22c55e;
+            --error-color: #f87171;
+            --border-radius: 22px;
+            --shadow: 0 28px 70px rgba(15, 23, 42, 0.45);
+            --transition: all 0.25s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            min-height: 100vh;
+            background: radial-gradient(circle at top left, rgba(96, 165, 250, 0.18) 0%, transparent 28%),
+                        radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.14) 0%, transparent 34%),
+                        linear-gradient(180deg, #020617 0%, #0b1220 100%);
+            color: var(--text-color);
+            padding: 32px;
+        }
+
+        .container {
+            max-width: 1040px;
+            margin: 0 auto;
+            display: grid;
+            gap: 28px;
+            grid-template-columns: 1.2fr 0.8fr;
+        }
+
+        .hero {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .hero-banner {
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(10, 14, 26, 0.98));
+            border-radius: 28px;
+            padding: 32px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(96, 165, 250, 0.12);
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-banner h1 {
+            font-size: clamp(2.3rem, 3vw, 3.4rem);
+            color: white;
+            line-height: 1.02;
+            margin-bottom: 14px;
+        }
+
+        .hero-banner p {
+            font-size: 1.05rem;
+            color: var(--muted-color);
+            max-width: 760px;
+            margin-bottom: 24px;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin-top: 16px;
+        }
+
+        .kpi-card {
+            background: rgba(15, 23, 42, 0.92);
+            border-radius: 20px;
+            padding: 20px 22px;
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04), 0 16px 32px rgba(15, 23, 42, 0.24);
+            transition: transform 0.25s ease, background 0.25s ease;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            background: rgba(15, 23, 42, 0.96);
+        }
+
+        .kpi-card span {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--muted-color);
+            margin-bottom: 10px;
+        }
+
+        .kpi-card strong {
+            display: block;
+            font-size: 1.35rem;
+            color: white;
+        }
+
+        .card {
+            background: rgba(15, 23, 42, 0.92);
+            border-radius: 26px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(96, 165, 250, 0.12);
+            padding: 28px;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 30px 65px rgba(15, 23, 42, 0.32);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .card-header h2 {
+            font-size: 1.4rem;
+            color: white;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(96, 165, 250, 0.14);
+            color: var(--primary-color);
+            font-size: 0.92rem;
+            font-weight: 600;
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .form-group label {
+            font-size: 0.97rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            border: 1px solid rgba(148, 163, 184, 0.24);
+            border-radius: 18px;
+            padding: 16px 18px;
+            font-size: 1rem;
+            color: white;
+            background: rgba(15, 23, 42, 0.72);
+            transition: var(--transition);
+        }
+
+        input[type="number"]::placeholder {
+            color: rgba(226, 232, 240, 0.55);
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.16);
+            background: rgba(15, 23, 42, 0.92);
+        }
+
+        .checkbox-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            color: white;
+            font-weight: 600;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary-color);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 18px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.1);
+            box-shadow: 0 18px 32px rgba(96, 165, 250, 0.28);
+        }
+
+        .btn:disabled {
+            background: #475569;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            border-top: 3px solid #ffffff;
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+        }
+
+        .message {
+            padding: 16px;
+            border-radius: 18px;
+            margin-top: 20px;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+
+        .message.success {
+            background: rgba(34, 197, 94, 0.12);
+            color: #d1fae5;
+            border: 1px solid rgba(34, 197, 94, 0.35);
+        }
+
+        .message.error {
+            background: rgba(248, 113, 113, 0.14);
+            color: #fecaca;
+            border: 1px solid rgba(248, 113, 113, 0.35);
+        }
+
+        .result {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--success-color);
+            text-align: center;
+            margin-top: 24px;
+        }
+
+        .history {
+            max-height: 420px;
+            overflow-y: auto;
+            display: grid;
+            gap: 16px;
+        }
+
+        .history-item {
+            background: rgba(15, 23, 42, 0.9);
+            padding: 20px;
+            border-radius: 20px;
+            border-left: 5px solid var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .history-item:hover {
+            transform: translateX(2px);
+            background: rgba(15, 23, 42, 1);
+        }
+
+        .history-item p {
+            margin: 8px 0;
+            color: var(--muted-color);
+        }
+
+        .history-item strong {
+            color: white;
+        }
+
+        .no-history {
+            text-align: center;
+            color: #94a3b8;
+            font-style: italic;
+            padding: 28px 0;
+        }
+
+        @media (max-width: 980px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 20px;
+            }
+
+            .hero-banner,
+            .card {
+                padding: 24px;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn {
+                padding: 14px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <section class="hero">
+            <div class="hero-banner">
+                <h1>Cashback inteligente para clientes premium</h1>
+                <p>Calcule seu cashback com precisão e acompanhe o histórico das suas consultas em uma interface clara, moderna e totalmente responsiva.</p>
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <span>Retorno médio</span>
+                        <strong>5%</strong>
+                    </div>
+                    <div class="kpi-card">
+                        <span>Bônus VIP</span>
+                        <strong>+10%</strong>
+                    </div>
+                    <div class="kpi-card">
+                        <span>Promoção</span>
+                        <strong>Dobro > R$ 500</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Calcular Cashback</h2>
+                    <span class="tag">Front-end puro</span>
+                </div>
+                <form id="cashbackForm" class="form-grid">
+                    <div class="form-group">
+                        <label for="valor">Valor da Compra (R$)</label>
+                        <input type="number" id="valor" placeholder="Ex: 100.00" min="0.01" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="desconto">Desconto (%)</label>
+                        <input type="number" id="desconto" placeholder="Ex: 10" min="0" max="100" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-container" for="vip">
+                            <input type="checkbox" id="vip">
+                            <span>Cliente VIP</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn" id="calculateBtn">
+                        <span id="btnText">Calcular Cashback</span>
+                    </button>
+                </form>
+                <div id="message" class="message" style="display: none;"></div>
+                <div id="result" class="result" style="display: none;"></div>
+            </div>
+        </section>
+
+        <aside class="card">
+            <div class="card-header">
+                <h2>Histórico de Consultas</h2>
+                <span class="tag">Últimas entradas</span>
+            </div>
+            <div id="history" class="history">
+                <p class="no-history">Nenhuma consulta realizada ainda.</p>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        // Elementos DOM
+        const form = document.getElementById('cashbackForm');
+        const calculateBtn = document.getElementById('calculateBtn');
+        const btnText = document.getElementById('btnText');
+        const message = document.getElementById('message');
+        const result = document.getElementById('result');
+        const history = document.getElementById('history');
+
+        // URL da API relativa, para manter o mesmo host e evitar problemas de origem
+        const API_BASE_URL = '';
+
+        // Função para mostrar mensagens
+        function showMessage(text, type) {
+            message.textContent = text;
+            message.className = `message ${type}`;
+            message.style.display = 'block';
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 5000);
+        }
+
+        // Função para mostrar loading
+        function setLoading(isLoading) {
+            calculateBtn.disabled = isLoading;
+            if (isLoading) {
+                btnText.innerHTML = '<span class="loading"></span>Calculando...';
+            } else {
+                btnText.textContent = 'Calcular Cashback';
+            }
+        }
+
+        // Função para validar formulário
+        function validateForm(valor, desconto) {
+            if (!valor || valor <= 0) {
+                showMessage('Por favor, insira um valor de compra válido maior que zero.', 'error');
+                return false;
+            }
+            if (desconto < 0 || desconto > 100) {
+                showMessage('O desconto deve estar entre 0% e 100%.', 'error');
+                return false;
+            }
+            return true;
+        }
+
+        // Função para calcular cashback
+        async function calculateCashback(event) {
+            event.preventDefault();
+
+            const valor = parseFloat(document.getElementById('valor').value);
+            const desconto = parseFloat(document.getElementById('desconto').value) || 0;
+            const vip = document.getElementById('vip').checked;
+
+            if (!validateForm(valor, desconto)) {
+                return;
+            }
+
+            setLoading(true);
+            result.style.display = 'none';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/cashback`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ valor, desconto, vip })
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(errorText || 'Erro na comunicação com o servidor');
+                }
+
+                const data = await response.json();
+
+                result.textContent = `Cashback Calculado: R$ ${data.cashback.toFixed(2)}`;
+                result.style.display = 'block';
+                showMessage('Cashback calculado com sucesso!', 'success');
+
+                // Recarregar histórico
+                loadHistory();
+            } catch (error) {
+                console.error('Erro:', error);
+                showMessage('Erro ao calcular cashback. Tente novamente.', 'error');
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        // Função para carregar histórico
+        async function loadHistory() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/historico`);
+                if (!response.ok) {
+                    throw new Error('Erro ao carregar histórico');
+                }
+
+                const data = await response.json();
+
+                if (data.length === 0) {
+                    history.innerHTML = '<p class="no-history">Nenhuma consulta realizada ainda.</p>';
+                    return;
+                }
+
+                history.innerHTML = '';
+                data.reverse().forEach(item => {
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'history-item';
+                    historyItem.innerHTML = `
+                        <p><strong>Valor:</strong> R$ ${item.valor.toFixed(2)}</p>
+                        <p><strong>Desconto:</strong> ${item.desconto}%</p>
+                        <p><strong>Cashback:</strong> R$ ${item.cashback.toFixed(2)}</p>
+                        <p><small>Data: ${new Date(item.timestamp || Date.now()).toLocaleString()}</small></p>
+                    `;
+                    history.appendChild(historyItem);
+                });
+            } catch (error) {
+                console.error('Erro ao carregar histórico:', error);
+                history.innerHTML = '<p class="no-history">Erro ao carregar histórico.</p>';
+            }
+        }
+
+        // Event listeners
+        form.addEventListener('submit', calculateCashback);
+
+        // Carregar histórico ao iniciar
+        document.addEventListener('DOMContentLoaded', loadHistory);
+    </script>
+</body>
+</html>
