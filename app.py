@@ -5,8 +5,8 @@ import os
 
 app = Flask(__name__)
 
-# Usar DATABASE_URL para hospedagem (Railway/Render) ou fallback local
-database_url = os.environ.get('DATABASE_URL', 'mysql+pymysql://cashback_user:1234@localhost/cashback_db')
+# Usar DATABASE_URL para hospedagem ou SQLite local
+database_url = os.environ.get('DATABASE_URL', 'sqlite:///cashback.db')
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 
 db.init_app(app)
