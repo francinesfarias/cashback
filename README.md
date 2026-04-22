@@ -40,7 +40,7 @@ Frontend estático + backend em Flask para cálculo de cashback.
 
 4. Acesse no navegador:
    ```
-   http://127.0.0.1:5000
+   http://XXX.X.X.1:5000
    ```
 
 ## Uso
